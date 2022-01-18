@@ -1,0 +1,19 @@
+{
+  "name": "node-learning",
+  "version": "1.0.0",
+  "description": "node learning - using node, express, MongoDB and Monogoose to build API's",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/idohurvitz/node_learning.git"
+  },
+  "author": "Ido Hurvitz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/idohurvitz/node_learning/issues"
+  },
+  "homepage": "https://github.com/idohurvitz/node_learning#readme"
+}
