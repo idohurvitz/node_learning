@@ -4,7 +4,8 @@
   "description": "node learning - using node, express, MongoDB and Monogoose to build API's",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon src/app.ts",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,13 @@
   "bugs": {
     "url": "https://github.com/idohurvitz/node_learning/issues"
   },
-  "homepage": "https://github.com/idohurvitz/node_learning#readme"
+  "homepage": "https://github.com/idohurvitz/node_learning#readme",
+  "dependencies": {
+    "express": "^4.17.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15",
+    "tsc": "^2.0.4",
+    "typescript": "^4.5.4"
+  }
 }
