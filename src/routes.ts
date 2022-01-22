@@ -46,8 +46,8 @@ function routes(app: Express) {
         }
 
         else {
-            logger.info(`invalid Date, sending error | userinput was: ${userInput}`)
-            res.json({ error: 'Invalid Date' })
+            logger.info(`invalid Date, sending error | userinput was: ${JSON.stringify(req.params)}`)
+            res.json({ error: config.get<string>('invalidDateError') })
         }
 
 
