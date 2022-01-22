@@ -1,17 +1,25 @@
 import { Request, Response, NextFunction } from "express";
 import validateSchema from '../utils/validateSchema';
 import logger from '../utils/logger';
+import config from "config";
+
 
 
 function validateRequest(req: Request, res: Response, next: NextFunction) {
     // this function is getting schema and request and enrich the request with the input type
     // for example: if the input was epoch time - will add the userInputType to be epoch
 
-    // validate userinputdata
+
     logger.info(`validateRequset middleware | got new request: ${JSON.stringify(req.params)} `)
+
     const userInput = req.params;
-    let userInputKey: string = Object.keys(userInput)[0]; // for now assming there is only one
-    let userInputValue: string = userInput[userInputKey];
+    let userInputKey: string | undefined = Object.keys(userInput)[0]; // TODO using base url to ensure client asked for timestamp API
+    let userInputValue: string | undefined = userInput[userInputKey];
+    if (typeof userInputValue === 'undefined' && !userInputValue) {
+        // the params are empty -> the is no char in the param
+        userInputValue = '';
+        logger.info(`validateRequset middleware | got request with no params`)
+    }
     if (getSchema(userInputKey) !== null) {
         let currentSchema: object = getSchema(userInputKey)
         for (const [key, value] of Object.entries(currentSchema)) {
@@ -28,7 +36,7 @@ function validateRequest(req: Request, res: Response, next: NextFunction) {
             }
         }
         logger.info(`validateRequset middleware | didnt passed validation | user input was: ${userInputValue} `)
-        req.userInputType = 'unkwon input type' // TODO add to config
+        req.userInputType = config.get<string>('unknownUserInputType');
         logger.info(`validateRequset middleware | adding type to request params | user input type: ${req.userInputType} `)
         next()
         return;
