@@ -4,8 +4,9 @@
   "description": "node learning - using node, express, MongoDB and Monogoose to build API's",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --files src/app.ts",
-    "build": "tsc"
+    "dev": "nodemon src/app.ts",
+    "build": "tsc",
+    "start": "ts-node src/app.ts"
   },
   "repository": {
     "type": "git",
