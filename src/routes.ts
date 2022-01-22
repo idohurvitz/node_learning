@@ -2,7 +2,9 @@ import { Express, Request, Response } from "express";
 import logger from "./utils/logger";
 import validateRequest from "./middleware/validateRequest";
 import config from "config";
-// TODO import the config file onload instead of handling everty request ( for better practise)
+import userController from "./controllers/user.controller";
+
+// TODO import the config file onload instead of handling every request ( for better practice)
 
 function routes(app: Express) {
   app.get("/api/whoami", (req: Request, res: Response) => {
@@ -15,6 +17,8 @@ function routes(app: Express) {
       ipaddress: req.ip,
     });
   });
+  app.get("/api/users", userController.getAllUsers);
+  app.post("/api/users", userController.createUser);
   app.get("/api/:date?", validateRequest, (req: Request, res: Response) => {
     // here I assume the input if one of the three formats - unix timestamp / string date / empty
     logger.info(
@@ -63,7 +67,7 @@ function routes(app: Express) {
       res.json(resposneBody);
     } else {
       logger.info(
-        `invalid Date, sending error | userinput was: ${JSON.stringify(
+        `invalid Date, sending error | user input was: ${JSON.stringify(
           req.params
         )}`
       );
