@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/idohurvitz/node_learning#readme",
   "dependencies": {
+    "@types/config": "^0.0.41",
+    "config": "^3.3.7",
     "express": "^4.17.2"
   },
   "devDependencies": {
