@@ -2,17 +2,16 @@ import { NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
 import User from "../models/user.model";
 import logger from "../utils/logger";
+import { userInputInterface } from "../middleware/validateYupRequest";
 const createUser = (req: Request, res: Response, next: NextFunction) => {
-  let usernameObj = req.body;
+  const usernameObj: userInputInterface = req.body; // here i can assume the req.body passed the validation and therefore i can predict the type (will be used later)
   logger.info(
     `got new request for creating user, request body: ${JSON.stringify(
       req.body
     )}`
   );
-  const user = new User({
-    _id: new mongoose.Types.ObjectId(),
-    username: usernameObj["username"], // TODO understand why you cant put object inside of object
-  });
+  const uniqueId = { _id: new mongoose.Types.ObjectId() };
+  const user = new User({ ...uniqueId, ...usernameObj }); // concat more then two objects (bloody ecma6)
 
   return user
     .save()
