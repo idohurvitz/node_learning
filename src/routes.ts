@@ -3,7 +3,7 @@ import logger from "./utils/logger";
 import validateRequest from "./middleware/validateRequest";
 import config from "config";
 import userController from "./controllers/user.controller";
-
+import { ValidateYup, Schemas } from "./middleware/validateYupRequest";
 // TODO import the config file onload instead of handling every request ( for better practice)
 
 function routes(app: Express) {
@@ -18,7 +18,7 @@ function routes(app: Express) {
     });
   });
   app.get("/api/users", userController.getAllUsers);
-  app.post("/api/users", userController.createUser);
+  app.post("/api/users", ValidateYup(Schemas.user), userController.createUser);
   app.get("/api/:date?", validateRequest, (req: Request, res: Response) => {
     // here I assume the input if one of the three formats - unix timestamp / string date / empty
     logger.info(
