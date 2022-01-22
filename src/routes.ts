@@ -12,7 +12,7 @@ function routes(app: Express) {
     res.json({
       software: req.headers["user-agent"],
       language: req.headers["accept-language"],
-      ipaddress: req.hostname,
+      ipaddress: req.ip,
     });
   });
   app.get("/api/:date?", validateRequest, (req: Request, res: Response) => {

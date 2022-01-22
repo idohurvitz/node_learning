@@ -18,6 +18,9 @@
     "url": "https://github.com/idohurvitz/node_learning/issues"
   },
   "homepage": "https://github.com/idohurvitz/node_learning#readme",
+  "engines": {
+    "node": "16.x"
+  },
   "dependencies": {
     "@types/config": "^0.0.41",
     "config": "^3.3.7",
