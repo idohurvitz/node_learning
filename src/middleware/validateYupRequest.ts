@@ -35,3 +35,10 @@ export const Schemas = {
 export interface userInputInterface {
   username: string;
 }
+
+export interface exerciseInputInterface {
+  username: string;
+  duration: number;
+  description: string;
+  date: string;
+}
