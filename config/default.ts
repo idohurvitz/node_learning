@@ -3,5 +3,6 @@ export default {
   unknownUserInputType: 'Unkwon User Input Type',
   unixtimeStampInputType: 'unixtimeStampInputType',
   dateStringInputType: 'dateStringInputType',
-  emptyInputType: 'emptyInputType'
+  emptyInputType: 'emptyInputType',
+  invalidDateError: 'Invalid Date'
 };
