@@ -1,19 +1,12 @@
-import { NextFunction, Request, Response } from "express";
-import mongoose from "mongoose";
-import Exercise from "../models/exercise.model";
-import logger from "../utils/logger";
-import { exerciseInputInterface } from "../middleware/validateYupRequest";
-import { array } from "yup";
-import { AnyObject } from "yup/lib/object";
-// import { getUser } from "./user.controller";
+import { NextFunction, Request, Response } from 'express';
+import mongoose from 'mongoose';
+import Exercise from '../models/exercise.model';
+import logger from '../utils/logger';
+import { exerciseInputInterface } from '../middleware/validateYupRequest';
 const createExercise = (req: Request, res: Response, next: NextFunction) => {
   // I added the user object to the request headers
   const excerciseObj: exerciseInputInterface = req.body; // here i can assume the req.body passed the validation and therefore i can predict the type (will be used later)
-  logger.info(
-    `got new request for creating exercise, request body: ${JSON.stringify(
-      req.body
-    )}`
-  );
+  logger.info(`got new request for creating exercise, request body: ${JSON.stringify(req.body)}`);
 
   const user = req.CurrentUserObject;
   if (Object.entries(user).length === 0) {
@@ -22,13 +15,9 @@ const createExercise = (req: Request, res: Response, next: NextFunction) => {
         req.CurrentUserObject
       )}`
     );
-    return res.status(500).json({ error: "error message" });
+    return res.status(500).json({ error: 'error message' });
   }
-  logger.info(
-    `getting user from request headers, user object: ${JSON.stringify(
-      req.CurrentUserObject
-    )}`
-  );
+  logger.info(`getting user from request headers, user object: ${JSON.stringify(req.CurrentUserObject)}`);
 
   const userId = { userId: user._id };
   const exercise = new Exercise({ ...userId, ...excerciseObj }); // concat more then two objects (bloody ecma6)
@@ -38,41 +27,22 @@ const createExercise = (req: Request, res: Response, next: NextFunction) => {
     .then((result: any) => {
       logger.info(
         `adding exercise successfully : ${JSON.stringify({
-          exercise: result,
+          exercise: result
         })} | sending to client: ${{ exercise: result, user: user }}`
       );
       return res.status(201).json({
         ...user,
         description: result.description,
-        duration: result.duration,
+        duration: result.duration
       });
     })
     .catch((error: any) => {
       logger.error(`adding exercise failed, error message: ${error.message}`);
       return res.status(500).json({
         message: error.message,
-        error,
+        error
       });
     });
 };
-
-// const getAllUsers = (req: Request, res: Response, next: NextFunction) => {
-//   User.find()
-//     .exec()
-//     .then((users: Array<object>) => {
-//       logger.info(`returning users array, array length :${array.length}`);
-//       return res.status(200).json({
-//         users: users,
-//         count: users.length,
-//       });
-//     })
-//     .catch((error: any) => {
-//       logger.error(`returning users failed, error message: ${error.message}`);
-//       return res.status(500).json({
-//         message: error.message,
-//         error,
-//       });
-//     });
-// };
 
 export default { createExercise };
