@@ -1,15 +1,18 @@
-import { object, string, number, date, AnyObjectSchema } from "yup";
-import { NextFunction, Request, Response } from "express";
-import logger from "../utils/logger";
+import { object, string, number, date, AnyObjectSchema } from 'yup';
+import { NextFunction, Request, Response } from 'express';
+import logger from '../utils/logger';
 
-export const ValidateYup = (schema: AnyObjectSchema) => {
+export const ValidateYup = (schema: AnyObjectSchema, type: 'body' | 'headers') => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const data = await schema.validate(req.body);
-
-      logger.info(
-        `validated successfully, validate data:  ${JSON.stringify(data)}`
-      );
+      let validatedInput: object | undefined;
+      if (type === 'body') {
+        validatedInput = req.body;
+      } else if (type === 'headers') {
+        validatedInput = req.headers;
+      }
+      const data = await schema.validate(validatedInput);
+      logger.info(`validated successfully, validate data:  ${JSON.stringify(data)}`);
 
       next();
     } catch (error) {
@@ -21,15 +24,14 @@ export const ValidateYup = (schema: AnyObjectSchema) => {
 };
 
 export const Schemas = {
-  user: object().shape({
-    username: string().required(),
+  userBodySchema: object().shape({
+    username: string().required()
   }),
-  exercise: object().shape({
-    username: string().required(),
+  exerciseBodySchema: object().shape({
     duration: number().required().positive().integer(),
     description: string().required(),
-    date: date().default(() => new Date()),
-  }),
+    date: date().default(() => new Date())
+  })
 };
 
 export interface userInputInterface {
@@ -37,8 +39,7 @@ export interface userInputInterface {
 }
 
 export interface exerciseInputInterface {
-  username: string;
   duration: number;
   description: string;
-  date: string;
+  date: Date;
 }
