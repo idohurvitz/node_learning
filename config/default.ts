@@ -3,7 +3,7 @@ const mongoUserPassword: string = "Password1";
 
 export default {
   port: 3000,
-  unknownUserInputType: "Unknown User Input Type",
+  unknownCurrentUserInputType: "Unknown User Input Type",
   unixtimeStampInputType: "unixtimeStampInputType",
   dateStringInputType: "dateStringInputType",
   emptyInputType: "emptyInputType",
