@@ -25,7 +25,7 @@ function routes(app: Express) {
     userController.getUser,
     exerciseController.createExercise
   );
-
+  app.get('/api/users/:_id/logs', userController.getUser, exerciseController.GetExerciseByUserId);
   app.get('/api/:date?', validateRequest, (req: Request, res: Response) => {
     // here I assume the input if one of the three formats - unix timestamp / string date / empty
     logger.info('route /api/:date | got new request, params are: ' + JSON.stringify(req.params));
