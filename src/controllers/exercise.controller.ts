@@ -28,12 +28,18 @@ const createExercise = (req: Request, res: Response, next: NextFunction) => {
       logger.info(
         `adding exercise successfully : ${JSON.stringify({
           exercise: result
-        })} | sending to client: ${{ exercise: result, user: user }}`
+        })} | sending to client: ${JSON.stringify({
+          ...user,
+          description: result.description,
+          duration: result.duration,
+          date: result.date
+        })}`
       );
       return res.status(201).json({
         ...user,
         description: result.description,
-        duration: result.duration
+        duration: result.duration,
+        date: result.date
       });
     })
     .catch((error: any) => {
