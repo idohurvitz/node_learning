@@ -65,9 +65,25 @@ const GetExerciseByUserId = async (req: Request, res: Response, next: NextFuncti
   logger.info(
     `get exercise by user id request | getting user from request headers, user object: ${JSON.stringify(req.CurrentUserObject)}`
   );
+  // handle user request params , i assume the validation happened in the middleware before
+  const userQuery: any = req.query;
+  logger.info(`handle query, query params: ${JSON.stringify(userQuery)}`);
+  let datesQuery: object | undefined;
+  if (userQuery.hasOwnProperty('from')) {
+    datesQuery = { $gte: userQuery.from };
+  }
+  if (userQuery.hasOwnProperty('to')) {
+    datesQuery = { ...datesQuery, $lte: userQuery.to };
+  }
 
+  const queryExercisesByUserId =
+    typeof datesQuery !== 'undefined' ? { userId: currentUser._id, date: datesQuery } : { userId: currentUser._id };
+
+  logger.info(`after checking the userQuery from request | raw request ${JSON.stringify(queryExercisesByUserId)}`);
   try {
-    const exercises = await Exercise.find({ userId: currentUser._id }).exec();
+    const exercises = userQuery.hasOwnProperty('limit')
+      ? await Exercise.find(queryExercisesByUserId).limit(userQuery.limit).exec()
+      : await Exercise.find(queryExercisesByUserId).exec();
 
     logger.info(`returning exercises of user :${currentUser._id}, amount of exercises: ${exercises.length}`);
     return res.status(200).json({ ...currentUser, log: exercises, count: exercises.length });
