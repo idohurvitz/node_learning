@@ -31,6 +31,12 @@ export const Schemas = {
     duration: number().required().positive().integer(),
     description: string().required(),
     date: date().default(() => new Date())
+  }),
+  exerciseParamsSchema: object().shape({
+    from: string().matches(new RegExp('^([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))$')),
+    to: string().matches(new RegExp('^([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))$')),
+    limit: number(),
+    _id: string().required()
   })
 };
 
