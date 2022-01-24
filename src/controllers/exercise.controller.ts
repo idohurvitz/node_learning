@@ -32,14 +32,14 @@ const createExercise = (req: Request, res: Response, next: NextFunction) => {
           ...user,
           description: result.description,
           duration: result.duration,
-          date: result.date
+          date: result.date.toDateString()
         })}`
       );
       return res.status(201).json({
         ...user,
         description: result.description,
         duration: result.duration,
-        date: result.date
+        date: result.date.toDateString()
       });
     })
     .catch((error: any) => {
