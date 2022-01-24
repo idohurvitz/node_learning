@@ -6,14 +6,14 @@ export const ValidateYup = (schema: AnyObjectSchema, type: 'body' | 'headers') =
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       let validatedInput: object | undefined;
-      type === 'body' ? (validatedInput = req.body) : (validatedInput = req.headers);
+      type === 'body' ? (validatedInput = req.body) : (validatedInput = req.query);
       const inputPostValidation = await schema.validate(validatedInput);
       logger.info(
         `validated successfully | got request:${JSON.stringify(
           validatedInput
         )} | updating Input after validate:  ${JSON.stringify(inputPostValidation)},`
       );
-      type === 'body' ? (req.body = inputPostValidation) : (req.headers = inputPostValidation);
+      type === 'body' ? (req.body = inputPostValidation) : '';
       next();
     } catch (error) {
       logger.error(`didn't validate, error: ${error}`);
@@ -35,8 +35,7 @@ export const Schemas = {
   exerciseParamsSchema: object().shape({
     from: string().matches(new RegExp('^([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))$')),
     to: string().matches(new RegExp('^([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))$')),
-    limit: number(),
-    _id: string().required()
+    limit: number()
   })
 };
 
