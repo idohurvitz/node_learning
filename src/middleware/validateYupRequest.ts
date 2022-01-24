@@ -9,9 +9,9 @@ export const ValidateYup = (schema: AnyObjectSchema, type: 'body' | 'headers') =
       type === 'body' ? (validatedInput = req.body) : (validatedInput = req.headers);
       const inputPostValidation = await schema.validate(validatedInput);
       logger.info(
-        `validated successfully | got request:${JSON.stringify(validatedInput)}| updating Input after validate:  ${JSON.stringify(
-          inputPostValidation
-        )},`
+        `validated successfully | got request:${JSON.stringify(
+          validatedInput
+        )} | updating Input after validate:  ${JSON.stringify(inputPostValidation)},`
       );
       type === 'body' ? (req.body = inputPostValidation) : (req.headers = inputPostValidation);
       next();
@@ -22,7 +22,7 @@ export const ValidateYup = (schema: AnyObjectSchema, type: 'body' | 'headers') =
     }
   };
 };
-
+// TODO using the typescript way of yup (ObjectSchema)
 export const Schemas = {
   userBodySchema: object().shape({
     username: string().required()
