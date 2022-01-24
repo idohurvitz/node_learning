@@ -6,14 +6,14 @@ export const ValidateYup = (schema: AnyObjectSchema, type: 'body' | 'headers') =
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       let validatedInput: object | undefined;
-      if (type === 'body') {
-        validatedInput = req.body;
-      } else if (type === 'headers') {
-        validatedInput = req.headers;
-      }
-      const data = await schema.validate(validatedInput);
-      logger.info(`validated successfully, validate data:  ${JSON.stringify(data)}`);
-
+      type === 'body' ? (validatedInput = req.body) : (validatedInput = req.headers);
+      const inputPostValidation = await schema.validate(validatedInput);
+      logger.info(
+        `validated successfully | got request:${JSON.stringify(validatedInput)}| updating Input after validate:  ${JSON.stringify(
+          inputPostValidation
+        )},`
+      );
+      type === 'body' ? (req.body = inputPostValidation) : (req.headers = inputPostValidation);
       next();
     } catch (error) {
       logger.error(`didn't validate, error: ${error}`);
