@@ -28,7 +28,7 @@ const createUser = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const getAllUsers = (req: Request, res: Response, next: NextFunction) => {
-  User.find()
+  User.find({}, { __v: 0 })
     .exec()
     .then((users: Array<object>) => {
       logger.info(`returning users array, array length :${users.length}`);
