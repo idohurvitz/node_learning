@@ -40,7 +40,7 @@ const createExercise = (req: Request, res: Response, next: NextFunction) => {
         ...user,
         description: result.description,
         duration: result.duration,
-        date: result.date.toDateString()
+        date: result.date.toDateString() // i should use the mongo $todateString aggregation
       });
     })
     .catch((error: any) => {
@@ -70,10 +70,10 @@ const GetExerciseByUserId = async (req: Request, res: Response, next: NextFuncti
   logger.info(`handle query, query params: ${JSON.stringify(userQuery)}`);
   let datesQuery: object | undefined;
   if (userQuery.hasOwnProperty('from')) {
-    datesQuery = { $gte: userQuery.from };
+    datesQuery = { $gte: `${userQuery.from}` };
   }
   if (userQuery.hasOwnProperty('to')) {
-    datesQuery = { ...datesQuery, $lte: userQuery.to };
+    datesQuery = { ...datesQuery, $lte: `${userQuery.to}` };
   }
 
   const queryExercisesByUserId =
@@ -82,11 +82,18 @@ const GetExerciseByUserId = async (req: Request, res: Response, next: NextFuncti
   logger.info(`after checking the userQuery from request | raw request ${JSON.stringify(queryExercisesByUserId)}`);
   try {
     const exercises = userQuery.hasOwnProperty('limit')
-      ? await Exercise.find({ queryExercisesByUserId }, { __v: 0, _id: 0 }).limit(userQuery.limit).exec()
-      : await Exercise.find({ queryExercisesByUserId }, { __v: 0, _id: 0 }).exec();
+      ? await Exercise.find(queryExercisesByUserId, { __v: 0, _id: 0 }).limit(userQuery.limit).exec()
+      : await Exercise.find(queryExercisesByUserId, { __v: 0, _id: 0 }).exec();
 
     logger.info(`returning exercises of user :${currentUser._id}, amount of exercises: ${exercises.length}`);
-    return res.status(200).json({ ...currentUser, log: exercises, count: exercises.length });
+
+    // @ts-ignore - because im manipulating the returned object and not the actual data (the error is indicative thanks to the Exercise interface)
+    const parsedExercises = exercises.map(({ description, duration, date }) => ({
+      description,
+      duration,
+      date: new Date(date).toDateString()
+    }));
+    return res.status(200).json({ ...currentUser, log: parsedExercises, count: exercises.length });
   } catch (error: any) {
     logger.error(`adding exercise failed, error message: ${error.message}`);
     return res.status(500).json({
