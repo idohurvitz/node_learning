@@ -12,11 +12,9 @@ const createUser = (req: Request, res: Response, next: NextFunction) => {
 
   return user
     .save()
-    .then((result: object) => {
-      logger.info(`adding user successfully : ${JSON.stringify({ user: result })}`);
-      return res.status(201).json({
-        user: result
-      });
+    .then((resultObj: any) => {
+      logger.info(`adding user successfully : ${JSON.stringify(resultObj)}`);
+      return res.status(201).json(resultObj);
     })
     .catch((error: any) => {
       logger.error(`adding user failed, error message: ${error.message}`);
