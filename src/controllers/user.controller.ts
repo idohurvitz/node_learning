@@ -32,10 +32,7 @@ const getAllUsers = (req: Request, res: Response, next: NextFunction) => {
     .exec()
     .then((users: Array<object>) => {
       logger.info(`returning users array, array length :${users.length}`);
-      return res.status(200).json({
-        users: users,
-        count: users.length
-      });
+      return res.status(200).send(users);
     })
     .catch((error: any) => {
       logger.error(`returning users failed, error message: ${error.message}`);
