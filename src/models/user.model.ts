@@ -9,7 +9,8 @@ const UserSchema: Schema = new Schema(
     username: { type: String, required: true }
   },
   {
-    timestamps: false // for the exercise design will implements my self
+    timestamps: false, // for the exercise design will implements my self
+    versionKey: false
   }
 );
 

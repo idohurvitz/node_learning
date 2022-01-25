@@ -15,7 +15,8 @@ const ExerciseSchema: Schema = new Schema(
     date: { type: Date, required: true }
   },
   {
-    timestamps: false // for the exercise design will implements my self
+    timestamps: false, // for the exercise design will implements my self
+    versionKey: false
   }
 );
 
