@@ -1,7 +1,10 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
 interface ExerciseInterface extends Document {
-  username: string;
+  userId: string;
+  duration: number;
+  description: string;
+  date: Date;
 }
 
 const ExerciseSchema: Schema = new Schema(
