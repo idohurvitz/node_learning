@@ -82,8 +82,8 @@ const GetExerciseByUserId = async (req: Request, res: Response, next: NextFuncti
   logger.info(`after checking the userQuery from request | raw request ${JSON.stringify(queryExercisesByUserId)}`);
   try {
     const exercises = userQuery.hasOwnProperty('limit')
-      ? await Exercise.find(queryExercisesByUserId).limit(userQuery.limit).exec()
-      : await Exercise.find(queryExercisesByUserId).exec();
+      ? await Exercise.find({ queryExercisesByUserId }, { __v: 0, _id: 0 }).limit(userQuery.limit).exec()
+      : await Exercise.find({ queryExercisesByUserId }, { __v: 0, _id: 0 }).exec();
 
     logger.info(`returning exercises of user :${currentUser._id}, amount of exercises: ${exercises.length}`);
     return res.status(200).json({ ...currentUser, log: exercises, count: exercises.length });
