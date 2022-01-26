@@ -37,6 +37,7 @@ function routes(app: Express) {
     const userInputType: string = req.CurrentUserInputType;
     logger.info('route /api/:date | user input type is: ' + userInputType);
     const userInput: { [index: string]: any } = req.params;
+    logger.info(`user request is: ${JSON.stringify(userInput)}`);
 
     if (userInputType === config.get<string>('unixtimeStampInputType')) {
       let dateObject: Date = new Date(parseInt(userInput['date']));
@@ -63,7 +64,7 @@ function routes(app: Express) {
       logger.info(`returning request to client. request body: ${JSON.stringify(resposneBody)}`);
       res.json(resposneBody);
     } else {
-      if (Date.parse(userInput['date']) != NaN) {
+      if (!isNaN(Date.parse(userInput['date']))) {
         let dateObject: Date = new Date(userInput['date']);
         const resposneBody: object = {
           unix: dateObject.getTime(),
