@@ -1,4 +1,4 @@
-export interface exerciseInterface {
+export default interface exerciseInterface {
   duration: number;
   description: string;
   date: Date;
