@@ -1,8 +1,9 @@
 import mongoose, { Document, Schema } from 'mongoose';
-interface UserInterface extends Document {
-  username: string;
-  _id: string;
-}
+import userInterface from '../interfaces/user.interface';
+// interface UserInterface extends Document {
+//   username: string;
+//   _id: string;
+// }
 
 const UserSchema: Schema = new Schema(
   {
@@ -14,4 +15,4 @@ const UserSchema: Schema = new Schema(
   }
 );
 
-export default mongoose.model<UserInterface>('User', UserSchema);
+export default mongoose.model<userInterface>('User', UserSchema);
