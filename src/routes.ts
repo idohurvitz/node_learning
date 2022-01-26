@@ -1,9 +1,10 @@
 import { Express, Request, Response } from 'express';
 import logger from './utils/logger';
-import validateRequest from './middleware/validateRequest';
+// import validateRequest from './middleware/validateRequest';
 import config from 'config';
 import userController from './controllers/user.controller';
-import { ValidateYup, Schemas } from './middleware/validateYupRequest';
+import { ValidateYup } from './middleware/validateYupRequest';
+import Schemas from './utils/validateSchemas';
 import exerciseController from './controllers/exercise.controller';
 // TODO import the config file onload instead of handling every request ( for better practice)
 
@@ -31,41 +32,41 @@ function routes(app: Express) {
     userController.getUser,
     exerciseController.GetExerciseByUserId
   );
-  app.get('/api/:date?', validateRequest, (req: Request, res: Response) => {
-    // here I assume the input if one of the three formats - unix timestamp / string date / empty
-    logger.info('route /api/:date | got new request, params are: ' + JSON.stringify(req.params));
-    const userInputType: string = req.CurrentUserInputType;
-    logger.info('route /api/:date | user input type is: ' + userInputType);
-    const userInput: { [index: string]: any } = req.params;
+  // app.get('/api/:date?', validateRequest, (req: Request, res: Response) => {
+  //   // here I assume the input if one of the three formats - unix timestamp / string date / empty
+  //   logger.info('route /api/:date | got new request, params are: ' + JSON.stringify(req.params));
+  //   const userInputType: string = req.CurrentUserInputType;
+  //   logger.info('route /api/:date | user input type is: ' + userInputType);
+  //   const userInput: { [index: string]: any } = req.params;
 
-    if (userInputType === config.get<string>('unixtimeStampInputType')) {
-      let dateObject: Date = new Date(parseInt(userInput['date']));
-      const resposneBody: object = {
-        unix: dateObject.getTime(),
-        utc: dateObject.toUTCString()
-      };
-      logger.info(`returning request to client. request body: ${JSON.stringify(resposneBody)}`);
-      res.json(resposneBody);
-    } else if (userInputType === config.get<string>('dateStringInputType')) {
-      let dateObject: Date = new Date(userInput['date']);
-      const resposneBody: object = {
-        unix: dateObject.getTime(),
-        utc: dateObject.toUTCString()
-      };
-      logger.info(`returning request to client. request body: ${JSON.stringify(resposneBody)}`);
-      res.json(resposneBody);
-    } else if (userInputType === config.get<string>('emptyInputType')) {
-      let dateObject: Date = new Date();
-      const resposneBody: object = {
-        unix: dateObject.getTime(),
-        utc: dateObject.toUTCString()
-      };
-      logger.info(`returning request to client. request body: ${JSON.stringify(resposneBody)}`);
-      res.json(resposneBody);
-    } else {
-      logger.info(`invalid Date, sending error | user input was: ${JSON.stringify(req.params)}`);
-      res.json({ error: config.get<string>('invalidDateError') });
-    }
-  });
+  //   if (userInputType === config.get<string>('unixtimeStampInputType')) {
+  //     let dateObject: Date = new Date(parseInt(userInput['date']));
+  //     const resposneBody: object = {
+  //       unix: dateObject.getTime(),
+  //       utc: dateObject.toUTCString()
+  //     };
+  //     logger.info(`returning request to client. request body: ${JSON.stringify(resposneBody)}`);
+  //     res.json(resposneBody);
+  //   } else if (userInputType === config.get<string>('dateStringInputType')) {
+  //     let dateObject: Date = new Date(userInput['date']);
+  //     const resposneBody: object = {
+  //       unix: dateObject.getTime(),
+  //       utc: dateObject.toUTCString()
+  //     };
+  //     logger.info(`returning request to client. request body: ${JSON.stringify(resposneBody)}`);
+  //     res.json(resposneBody);
+  //   } else if (userInputType === config.get<string>('emptyInputType')) {
+  //     let dateObject: Date = new Date();
+  //     const resposneBody: object = {
+  //       unix: dateObject.getTime(),
+  //       utc: dateObject.toUTCString()
+  //     };
+  //     logger.info(`returning request to client. request body: ${JSON.stringify(resposneBody)}`);
+  //     res.json(resposneBody);
+  //   } else {
+  //     logger.info(`invalid Date, sending error | user input was: ${JSON.stringify(req.params)}`);
+  //     res.json({ error: config.get<string>('invalidDateError') });
+  //   }
+  // });
 }
 export default routes;
