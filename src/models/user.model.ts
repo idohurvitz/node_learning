@@ -1,9 +1,5 @@
 import mongoose, { Document, Schema } from 'mongoose';
 import userInterface from '../interfaces/user.interface';
-// interface UserInterface extends Document {
-//   username: string;
-//   _id: string;
-// }
 
 const UserSchema: Schema = new Schema(
   {
