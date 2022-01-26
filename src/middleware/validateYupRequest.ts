@@ -1,4 +1,4 @@
-import { AnyObjectSchema } from 'yup';
+import { AnyObjectSchema, ValidationError } from 'yup';
 import { NextFunction, Request, Response } from 'express';
 import logger from '../utils/logger';
 
@@ -8,6 +8,10 @@ export const ValidateYup = (schema: AnyObjectSchema, type: 'body' | 'headers') =
     let validatedInput: object | undefined;
     type === 'body' ? (validatedInput = req.body) : (validatedInput = req.query);
     try {
+      if (schema.isValidSync(validatedInput, { strict: true })) {
+      } else {
+        throw new ValidationError("didn't pass validation");
+      }
       const inputPostValidation = await schema.validate(validatedInput);
       logger.info(
         `validated successfully | got request:${JSON.stringify(
