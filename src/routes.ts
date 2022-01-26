@@ -63,8 +63,18 @@ function routes(app: Express) {
       logger.info(`returning request to client. request body: ${JSON.stringify(resposneBody)}`);
       res.json(resposneBody);
     } else {
-      logger.info(`invalid Date, sending error | user input was: ${JSON.stringify(req.params)}`);
-      res.json({ error: config.get<string>('invalidDateError') });
+      if (Date.parse(userInput['date']) != NaN) {
+        let dateObject: Date = new Date(userInput['date']);
+        const resposneBody: object = {
+          unix: dateObject.getTime(),
+          utc: dateObject.toUTCString()
+        };
+        logger.info(`returning request to client. request body: ${JSON.stringify(resposneBody)}`);
+        res.json(resposneBody);
+      } else {
+        logger.info(`invalid Date, sending error | user input was: ${JSON.stringify(req.params)}`);
+        res.json({ error: config.get<string>('invalidDateError') });
+      }
     }
   });
 }
