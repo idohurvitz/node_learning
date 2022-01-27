@@ -36,22 +36,19 @@ const createUrl = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 const getUrl = (req: Request, res: Response, next: NextFunction) => {
-  // getting the user id from the request header - I'm not validating the url for now
-  // later will add another middleware to return the actual user object if necessarily
   logger.info(`got new request for handling url, requesrt params: ${JSON.stringify(req.params)}`);
   logger.info(`shorturl type is: ${typeof req.params}`);
   const urlId = parseInt(req.params.shortUrl);
-  // returning the userObject
   Url.find({ short_url: urlId })
     .exec()
     .then((result: any) => {
-      logger.info(`redirecting user, url tuple:${result[0]}`);
+      logger.info(`redirecting url, url tuple:${result[0]}`);
       res.redirect(result[0].url);
       next();
       return;
     })
     .catch((error: any) => {
-      logger.error(`returning user failed, error message: ${error.message}`);
+      logger.error(`returning url failed, error message: ${error.message}`);
       return res.status(500).json({
         message: error.message,
         error
