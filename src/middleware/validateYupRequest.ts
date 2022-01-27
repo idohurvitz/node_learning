@@ -1,5 +1,5 @@
 import { object, string, number, date, AnyObjectSchema } from 'yup';
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Request, Response, urlencoded } from 'express';
 import logger from '../utils/logger';
 
 export const ValidateYup = (schema: AnyObjectSchema, type: 'body' | 'headers') => {
@@ -16,10 +16,10 @@ export const ValidateYup = (schema: AnyObjectSchema, type: 'body' | 'headers') =
       );
       type === 'body' ? (req.body = inputPostValidation) : '';
       next();
-    } catch (error) {
-      logger.error(`Validator | didn't validate | user input was: ${JSON.stringify(validatedInput)} | error: ${error} | tr`);
+    } catch (errorObj: any) {
+      logger.error(`Validator | didn't validate | user input was: ${JSON.stringify(validatedInput)} | error: ${errorObj} | tr`);
 
-      return res.status(422).json({ error });
+      return res.json({ error: errorObj.errors[0] });
     }
   };
 };
@@ -37,6 +37,9 @@ export const Schemas = {
     from: string().matches(new RegExp('^([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))$')),
     to: string().matches(new RegExp('^([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))$')),
     limit: number()
+  }),
+  urlBodySchema: object().shape({
+    url: string().url('invalid url').required()
   })
 };
 
@@ -48,4 +51,9 @@ export interface exerciseInputInterface {
   duration: number;
   description: string;
   date: Date;
+}
+
+export interface urlInterface {
+  short_url?: number;
+  url: string;
 }

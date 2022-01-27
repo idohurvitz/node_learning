@@ -5,6 +5,7 @@ import config from 'config';
 import userController from './controllers/user.controller';
 import { ValidateYup, Schemas } from './middleware/validateYupRequest';
 import exerciseController from './controllers/exercise.controller';
+import urlController from './controllers/url.controller';
 // TODO import the config file onload instead of handling every request ( for better practice)
 
 function routes(app: Express) {
@@ -16,6 +17,10 @@ function routes(app: Express) {
       ipaddress: req.ip
     });
   });
+
+  app.post('/api/shorturl/', ValidateYup(Schemas.urlBodySchema, 'body'), urlController.createUrl);
+  app.get('/api/shorturl/:shortUrl', urlController.getUrl);
+
   app.get('/api/users', userController.getAllUsers);
   app.post('/api/users', ValidateYup(Schemas.userBodySchema, 'body'), userController.createUser);
 
