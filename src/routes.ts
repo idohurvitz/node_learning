@@ -13,19 +13,21 @@ const upload = multer({ dest: './public/data/uploads/' });
 
 function routes(app: Express) {
   app.post('/api/fileanalyse', upload.single('upfile'), (req: Request, res: Response) => {
-    if (!req.file) res.json({ error: 'no file was uploading' });
+    const fileMetaData: any = req.file;
+    logger.log(`getting file from user, file metadata: ${JSON.stringify(fileMetaData)}`);
+    if (!fileMetaData) res.json({ error: 'no file was uploading' });
 
     logger.info(
       JSON.stringify({
-        name: req.file.originalname,
-        type: req.file.mimetype,
-        size: req.file.size
+        name: fileMetaData.originalname,
+        type: fileMetaData.mimetype,
+        size: fileMetaData.Datasize
       })
     );
     return res.json({
-      name: req.file.originalname,
-      type: req.file.mimetype,
-      size: req.file.size
+      name: fileMetaData.originalname,
+      type: fileMetaData.mimetype,
+      size: fileMetaData.size
     });
   });
 
@@ -65,28 +67,28 @@ function routes(app: Express) {
 
     if (userInputType === config.get<string>('unixtimeStampInputType')) {
       let dateObject: Date = new Date(parseInt(userInput['date']));
-      const resposneBody: object = {
+      const responseBody: object = {
         unix: dateObject.getTime(),
         utc: dateObject.toUTCString()
       };
-      logger.info(`returning request to client. request body: ${JSON.stringify(resposneBody)}`);
-      res.json(resposneBody);
+      logger.info(`returning request to client. request body: ${JSON.stringify(responseBody)}`);
+      res.json(responseBody);
     } else if (userInputType === config.get<string>('dateStringInputType')) {
       let dateObject: Date = new Date(userInput['date']);
-      const resposneBody: object = {
+      const responseBody: object = {
         unix: dateObject.getTime(),
         utc: dateObject.toUTCString()
       };
-      logger.info(`returning request to client. request body: ${JSON.stringify(resposneBody)}`);
-      res.json(resposneBody);
+      logger.info(`returning request to client. request body: ${JSON.stringify(responseBody)}`);
+      res.json(responseBody);
     } else if (userInputType === config.get<string>('emptyInputType')) {
       let dateObject: Date = new Date();
-      const resposneBody: object = {
+      const responseBody: object = {
         unix: dateObject.getTime(),
         utc: dateObject.toUTCString()
       };
-      logger.info(`returning request to client. request body: ${JSON.stringify(resposneBody)}`);
-      res.json(resposneBody);
+      logger.info(`returning request to client. request body: ${JSON.stringify(responseBody)}`);
+      res.json(responseBody);
     } else {
       logger.info(`invalid Date, sending error | user input was: ${JSON.stringify(req.params)}`);
       res.json({ error: config.get<string>('invalidDateError') });
