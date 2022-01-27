@@ -1,17 +1,14 @@
-import mongoose from "mongoose";
-import config from "config";
-import logger from "./logger";
-
+import mongoose from 'mongoose';
+import config from 'config';
+import logger from './logger';
 async function connect() {
-  const dbUri = config.get<string>("dbUri");
+  const dbUri = config.get<string>('dbUri');
 
   try {
-    await mongoose.connect(dbUri);
-    logger.info("DB connected | dburi: " + dbUri);
+    const connection = await mongoose.connect(dbUri);
+    logger.info('DB connected | dburi: ' + dbUri);
   } catch (error: any) {
-    logger.error(
-      `Could not connect to db | error: ${error} | error message: ${error.message}`
-    );
+    logger.error(`Could not connect to db | error: ${error} | error message: ${error.message}`);
     // process.exit(1); // in order to stop the server from dealing with different requests, even if currently working on.
   }
 }
