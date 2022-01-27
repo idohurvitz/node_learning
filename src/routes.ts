@@ -14,7 +14,7 @@ const upload = multer({ dest: './public/data/uploads/' });
 function routes(app: Express) {
   app.post('/api/fileanalyse', upload.single('upfile'), (req: Request, res: Response) => {
     const fileMetaData: any = req.file;
-    logger.log(`getting file from user, file metadata: ${JSON.stringify(fileMetaData)}`);
+    logger.info(`getting file from user, file metadata: ${JSON.stringify(fileMetaData)}`);
     if (!fileMetaData) res.json({ error: 'no file was uploading' });
 
     logger.info(
