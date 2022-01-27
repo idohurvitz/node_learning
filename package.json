@@ -22,9 +22,11 @@
   },
   "dependencies": {
     "@types/config": "^0.0.41",
+    "@types/multer": "^1.4.7",
     "config": "^3.3.7",
     "cors": "^2.8.5",
-    "express": "^4.17.2"
+    "express": "^4.17.2",
+    "multer": "^1.4.4"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",

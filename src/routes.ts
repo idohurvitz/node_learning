@@ -6,9 +6,31 @@ import userController from './controllers/user.controller';
 import { ValidateYup, Schemas } from './middleware/validateYupRequest';
 import exerciseController from './controllers/exercise.controller';
 import urlController from './controllers/url.controller';
+import multer from 'multer';
+const upload = multer({ dest: './public/data/uploads/' });
+
 // TODO import the config file onload instead of handling every request ( for better practice)
 
 function routes(app: Express) {
+  app.post('/api/fileanalyse', upload.single('upfile'), (req: Request, res: Response) => {
+    const fileMetaData: any = req.file;
+    logger.info(`getting file from user, file metadata: ${JSON.stringify(fileMetaData)}`);
+    if (!fileMetaData) res.json({ error: 'no file was uploading' });
+
+    logger.info(
+      JSON.stringify({
+        name: fileMetaData.originalname,
+        type: fileMetaData.mimetype,
+        size: fileMetaData.Datasize
+      })
+    );
+    return res.json({
+      name: fileMetaData.originalname,
+      type: fileMetaData.mimetype,
+      size: fileMetaData.size
+    });
+  });
+
   app.get('/api/whoami', (req: Request, res: Response) => {
     logger.info(`route /api/whoami | got new request, headers are: ${req.hostname}`);
     res.json({
@@ -46,28 +68,28 @@ function routes(app: Express) {
 
     if (userInputType === config.get<string>('unixtimeStampInputType')) {
       let dateObject: Date = new Date(parseInt(userInput['date']));
-      const resposneBody: object = {
+      const responseBody: object = {
         unix: dateObject.getTime(),
         utc: dateObject.toUTCString()
       };
-      logger.info(`returning request to client. request body: ${JSON.stringify(resposneBody)}`);
-      res.json(resposneBody);
+      logger.info(`returning request to client. request body: ${JSON.stringify(responseBody)}`);
+      res.json(responseBody);
     } else if (userInputType === config.get<string>('dateStringInputType')) {
       let dateObject: Date = new Date(userInput['date']);
-      const resposneBody: object = {
+      const responseBody: object = {
         unix: dateObject.getTime(),
         utc: dateObject.toUTCString()
       };
-      logger.info(`returning request to client. request body: ${JSON.stringify(resposneBody)}`);
-      res.json(resposneBody);
+      logger.info(`returning request to client. request body: ${JSON.stringify(responseBody)}`);
+      res.json(responseBody);
     } else if (userInputType === config.get<string>('emptyInputType')) {
       let dateObject: Date = new Date();
-      const resposneBody: object = {
+      const responseBody: object = {
         unix: dateObject.getTime(),
         utc: dateObject.toUTCString()
       };
-      logger.info(`returning request to client. request body: ${JSON.stringify(resposneBody)}`);
-      res.json(resposneBody);
+      logger.info(`returning request to client. request body: ${JSON.stringify(responseBody)}`);
+      res.json(responseBody);
     } else {
       if (!isNaN(Date.parse(userInput['date']))) {
         let dateObject: Date = new Date(userInput['date']);
