@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon src/app.ts",
     "start": "ts-node src/app.ts",
-    "prettier-format": "prettier --config .prettierrc 'src/**/*.ts' --write"
+    "prettier-format": "prettier --config .prettierrc 'src/**/*.ts' --write",
+    "lint": "eslint . --ext .ts"
   },
   "repository": {
     "type": "git",
@@ -26,7 +27,6 @@
     "@types/multer": "^1.4.7",
     "config": "^3.3.7",
     "cors": "^2.8.5",
-    "eslint-config-prettier": "^8.3.0",
     "express": "^4.17.2",
     "multer": "^1.4.4"
   },
@@ -38,6 +38,8 @@
     "@typescript-eslint/parser": "^5.10.1",
     "dayjs": "^1.10.7",
     "eslint": "^8.7.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
     "mongoose": "^6.1.7",
     "nodemon": "^2.0.15",
     "pino": "^7.6.3",
