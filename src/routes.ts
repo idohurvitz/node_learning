@@ -6,9 +6,29 @@ import userController from './controllers/user.controller';
 import { ValidateYup, Schemas } from './middleware/validateYupRequest';
 import exerciseController from './controllers/exercise.controller';
 import urlController from './controllers/url.controller';
+import multer from 'multer';
+const upload = multer({ dest: './public/data/uploads/' });
+
 // TODO import the config file onload instead of handling every request ( for better practice)
 
 function routes(app: Express) {
+  app.post('/api/fileanalyse', upload.single('upfile'), (req: Request, res: Response) => {
+    if (!req.file) res.json({ error: 'no file was uploading' });
+
+    logger.info(
+      JSON.stringify({
+        name: req.file.originalname,
+        type: req.file.mimetype,
+        size: req.file.size
+      })
+    );
+    return res.json({
+      name: req.file.originalname,
+      type: req.file.mimetype,
+      size: req.file.size
+    });
+  });
+
   app.get('/api/whoami', (req: Request, res: Response) => {
     logger.info(`route /api/whoami | got new request, headers are: ${req.hostname}`);
     res.json({
