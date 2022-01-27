@@ -24,7 +24,7 @@ const createUrl = async (req: Request, res: Response, next: NextFunction) => {
     .save()
     .then((resultObj: any) => {
       logger.info(`adding url successfully : ${JSON.stringify(resultObj)}`);
-      return res.status(201).json({ url: resultObj.url, short_url: resultObj.short_url });
+      return res.status(201).json({ original_url: resultObj.url, short_url: resultObj.short_url });
     })
     .catch((error: any) => {
       logger.error(`adding url failed, error message: ${error.message}`);

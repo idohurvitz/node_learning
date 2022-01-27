@@ -19,7 +19,7 @@ export const ValidateYup = (schema: AnyObjectSchema, type: 'body' | 'headers') =
     } catch (errorObj: any) {
       logger.error(`Validator | didn't validate | user input was: ${JSON.stringify(validatedInput)} | error: ${errorObj} | tr`);
 
-      return res.status(422).json({ error: errorObj.errors[0] });
+      return res.json({ error: errorObj.errors[0] });
     }
   };
 };
