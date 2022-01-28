@@ -1,9 +1,9 @@
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import mongoose from 'mongoose';
 import Url from '../models/url.model';
 import logger from '../utils/logger';
 import { urlInterface } from '../middleware/validateYupRequest';
-const createUrl = async (req: Request, res: Response, next: NextFunction) => {
+const createUrl = async (req: Request, res: Response) => {
   const urlObj: urlInterface = req.body;
   // here i can assume the req.body passed the validation and therefore i can predict the type (will be used later)
   logger.info(`got new request for creating url, request body: ${JSON.stringify(req.body)}`);
@@ -32,20 +32,18 @@ const createUrl = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const getUrl = async (req: Request, res: Response, next: NextFunction) => {
-  logger.info(`got new request for handling url, requesrt params: ${JSON.stringify(req.params)}`);
+const getUrl = async (req: Request, res: Response) => {
+  logger.info(`got new request for handling url, request params: ${JSON.stringify(req.params)}`);
   logger.info(`shorturl type is: ${typeof req.params}`);
   const urlId = parseInt(req.params.shortUrl);
   try {
     const resultObj = await Url.find({ short_url: urlId }).exec();
     logger.info(`redirecting url, url tuple:${resultObj[0]}`);
     res.redirect(resultObj[0].url);
-    next();
-    return;
-  } catch (error: any) {
-    logger.error(`returning url failed, error message: ${error.message}`);
+  } catch (error) {
+    logger.error(`returning url failed, error message: ${error}`);
     return res.status(500).json({
-      message: error.message,
+      message: error,
       error
     });
   }

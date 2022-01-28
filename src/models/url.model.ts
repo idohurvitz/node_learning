@@ -14,6 +14,6 @@ export const UrlSchema: Schema = new Schema(
     versionKey: false
   }
 );
-const UrlModel = mongoose.model<UrlInterface>('Url', UrlSchema);
+const UrlModel = mongoose.model<UrlInterface>('Url', UrlSchema); // for actual application we can  use the mongoose middleware here - wrap the db actions
 
 export default UrlModel;

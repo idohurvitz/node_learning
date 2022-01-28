@@ -9,7 +9,7 @@ import urlController from './controllers/url.controller';
 import multer from 'multer';
 const upload = multer({ dest: './public/data/uploads/' });
 
-// TODO import the config file onload instead of handling every request ( for better practice)
+// i should  import the config file onload instead of handling every request ( for better practice)
 
 function routes(app: Express) {
   app.post('/api/fileanalyse', upload.single('upfile'), (req: Request, res: Response) => {
@@ -67,7 +67,7 @@ function routes(app: Express) {
     logger.info(`user request is: ${JSON.stringify(userInput)}`);
 
     if (userInputType === config.get<string>('unixtimeStampInputType')) {
-      let dateObject: Date = new Date(parseInt(userInput['date']));
+      const dateObject: Date = new Date(parseInt(userInput['date']));
       const responseBody: object = {
         unix: dateObject.getTime(),
         utc: dateObject.toUTCString()
@@ -75,7 +75,7 @@ function routes(app: Express) {
       logger.info(`returning request to client. request body: ${JSON.stringify(responseBody)}`);
       res.json(responseBody);
     } else if (userInputType === config.get<string>('dateStringInputType')) {
-      let dateObject: Date = new Date(userInput['date']);
+      const dateObject: Date = new Date(userInput['date']);
       const responseBody: object = {
         unix: dateObject.getTime(),
         utc: dateObject.toUTCString()
@@ -83,7 +83,7 @@ function routes(app: Express) {
       logger.info(`returning request to client. request body: ${JSON.stringify(responseBody)}`);
       res.json(responseBody);
     } else if (userInputType === config.get<string>('emptyInputType')) {
-      let dateObject: Date = new Date();
+      const dateObject: Date = new Date();
       const responseBody: object = {
         unix: dateObject.getTime(),
         utc: dateObject.toUTCString()
@@ -92,7 +92,7 @@ function routes(app: Express) {
       res.json(responseBody);
     } else {
       if (!isNaN(Date.parse(userInput['date']))) {
-        let dateObject: Date = new Date(userInput['date']);
+        const dateObject: Date = new Date(userInput['date']);
         const resposneBody: object = {
           unix: dateObject.getTime(),
           utc: dateObject.toUTCString()

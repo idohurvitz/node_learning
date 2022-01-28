@@ -1,5 +1,5 @@
 import { object, string, number, date, AnyObjectSchema } from 'yup';
-import { NextFunction, Request, Response, urlencoded } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import logger from '../utils/logger';
 
 export const ValidateYup = (schema: AnyObjectSchema, type: 'body' | 'headers') => {
@@ -23,7 +23,6 @@ export const ValidateYup = (schema: AnyObjectSchema, type: 'body' | 'headers') =
     }
   };
 };
-// TODO using the typescript way of yup (ObjectSchema)
 export const Schemas = {
   userBodySchema: object().shape({
     username: string().required()

@@ -10,7 +10,7 @@ function validateRequest(req: Request, res: Response, next: NextFunction) {
   logger.info(`validateRequest middleware | got new request: ${JSON.stringify(req.params)} `);
 
   const userInput = req.params;
-  let userInputKey: string | undefined = Object.keys(userInput)[0]; // TODO using base url to ensure client asked for timestamp API
+  const userInputKey: string | undefined = Object.keys(userInput)[0];
   let userInputValue: string | undefined = userInput[userInputKey];
   if (typeof userInputValue === 'undefined' && !userInputValue) {
     // the params are empty -> the is no char in the param
@@ -18,9 +18,9 @@ function validateRequest(req: Request, res: Response, next: NextFunction) {
     logger.info(`validateRequest middleware | got request with no params`);
   }
   if (getSchema(userInputKey) !== null) {
-    let currentSchema: object = getSchema(userInputKey);
+    const currentSchema: object = getSchema(userInputKey);
     for (const [key, value] of Object.entries(currentSchema)) {
-      const regex: RegExp = new RegExp(value);
+      const regex = new RegExp(value);
       logger.info(`validateRequest middleware | validation | user input: ${userInputValue} | regex: ${regex}`);
 
       if (regex.test(userInputValue)) {
@@ -45,9 +45,9 @@ function validateRequest(req: Request, res: Response, next: NextFunction) {
 
 function getSchema(requestType: string) {
   // currently assuming there is only one param each time
-
-  if (validateSchema[requestType]) {
-    return validateSchema[requestType];
+  const requestType = requestType;
+  if (validateSchema?.requestType) {
+    return validateSchema.requestType;
   } else return null;
 }
 
