@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import validateSchema from '../utils/validateSchema';
 import logger from '../utils/logger';
 import config from 'config';
+import { string } from 'yup';
 
 function validateRequest(req: Request, res: Response, next: NextFunction) {
   // this function is getting schema and request and enrich the request with the input type
@@ -10,6 +11,7 @@ function validateRequest(req: Request, res: Response, next: NextFunction) {
   logger.info(`validateRequest middleware | got new request: ${JSON.stringify(req.params)} `);
 
   const userInput = req.params;
+  const schema = validateSchema;
   const userInputKey: string | undefined = Object.keys(userInput)[0];
   let userInputValue: string | undefined = userInput[userInputKey];
   if (typeof userInputValue === 'undefined' && !userInputValue) {
@@ -17,9 +19,12 @@ function validateRequest(req: Request, res: Response, next: NextFunction) {
     userInputValue = '';
     logger.info(`validateRequest middleware | got request with no params`);
   }
-  if (getSchema(userInputKey) !== null) {
-    const currentSchema: object = getSchema(userInputKey);
-    for (const [key, value] of Object.entries(currentSchema)) {
+  if (userInputKey in schema) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore - im sure the limit is type number because of validation middleware
+    // const currentSchema = schema.userInputKey;
+    for (const [key, value] of Object.entries(schema[userInputKey])) {
+      // @ts-ignore - knowing the input type
       const regex = new RegExp(value);
       logger.info(`validateRequest middleware | validation | user input: ${userInputValue} | regex: ${regex}`);
 
@@ -39,16 +44,6 @@ function validateRequest(req: Request, res: Response, next: NextFunction) {
   } else {
     logger.error('problem with validating schema');
   }
-
-  // adding the type to the request
-}
-
-function getSchema(requestType: string) {
-  // currently assuming there is only one param each time
-  const requestType = requestType;
-  if (validateSchema?.requestType) {
-    return validateSchema.requestType;
-  } else return null;
 }
 
 export default validateRequest;
