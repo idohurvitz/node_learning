@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import mongoose from 'mongoose';
 import Url from '../models/url.model';
 import logger from '../utils/logger';
-import { urlInterface } from '../middleware/validateYupRequest';
+import urlInterface from '../interfaces/url.interface';
 const createUrl = async (req: Request, res: Response) => {
   const urlObj: urlInterface = req.body;
   // here i can assume the req.body passed the validation and therefore i can predict the type (will be used later)

@@ -1,8 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import validateSchema from '../utils/validateSchema';
+import validateSchema from '../utils/validateDateSchema';
 import logger from '../utils/logger';
 import config from 'config';
-import { string } from 'yup';
 
 function validateRequest(req: Request, res: Response, next: NextFunction) {
   // this function is getting schema and request and enrich the request with the input type

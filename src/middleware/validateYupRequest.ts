@@ -5,12 +5,12 @@ import logger from '../utils/logger';
 export const ValidateYup = (schema: AnyObjectSchema, type: 'body' | 'headers') => {
   return async (req: Request, res: Response, next: NextFunction) => {
     logger.info(`Validator | got new validate request | user request is: ${JSON.stringify({ ...req.query, ...req.body })}`);
-    let validatedInput: object | undefined;
+    let validatedInput;
     type === 'body' ? (validatedInput = req.body) : (validatedInput = req.query);
     try {
       if (!schema.isValidSync(validatedInput, { strict: true })) {
-        // wired bug in yup - i validate strictly before parsing with validate function
-        throw new ValidationError(`didn't pass validation, user input was: ${validatedInput}, schema was: ${schema}`);
+        // i validate strictly before parsing with validate function
+        throw new ValidationError(`didn't pass validation`, validatedInput);
       }
       const inputPostValidation = await schema.validate(validatedInput);
       logger.info(

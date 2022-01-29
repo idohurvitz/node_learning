@@ -94,12 +94,12 @@ function routes(app: Express) {
     } else {
       if (!isNaN(Date.parse(userInput['date']))) {
         const dateObject: Date = new Date(userInput['date']);
-        const resposneBody: object = {
+        const responseBody: object = {
           unix: dateObject.getTime(),
           utc: dateObject.toUTCString()
         };
-        logger.info(`returning request to client. request body: ${JSON.stringify(resposneBody)}`);
-        res.json(resposneBody);
+        logger.info(`returning request to client. request body: ${JSON.stringify(responseBody)}`);
+        res.json(responseBody);
       } else {
         logger.info(`invalid Date, sending error | user input was: ${JSON.stringify(req.params)}`);
         res.json({ error: config.get<string>('invalidDateError') });
