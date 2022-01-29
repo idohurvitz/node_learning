@@ -1,5 +1,5 @@
-const mongoUserName: string = 'admin';
-const mongoUserPassword: string = 'Password1';
+const mongoUserName = 'admin';
+const mongoUserPassword = 'Password1';
 
 export default {
   port: 3000,

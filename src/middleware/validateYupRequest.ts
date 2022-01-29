@@ -8,9 +8,9 @@ export const ValidateYup = (schema: AnyObjectSchema, type: 'body' | 'headers') =
     let validatedInput: object | undefined;
     type === 'body' ? (validatedInput = req.body) : (validatedInput = req.query);
     try {
-      if (schema.isValidSync(validatedInput, { strict: true })) {
-      } else {
-        throw new ValidationError("didn't pass validation");
+      if (!schema.isValidSync(validatedInput, { strict: true })) {
+        // wired bug in yup - i validate strictly before parsing with validate function
+        throw new ValidationError(`didn't pass validation, user input was: ${validatedInput}, schema was: ${schema}`);
       }
       const inputPostValidation = await schema.validate(validatedInput);
       logger.info(
@@ -22,8 +22,8 @@ export const ValidateYup = (schema: AnyObjectSchema, type: 'body' | 'headers') =
       next();
     } catch (error) {
       logger.error(`Validator | didn't validate | user input was: ${JSON.stringify(validatedInput)} | error: ${error} `);
-
-      return res.status(422).json({ error });
+      // @ts-ignore - the try is catching self errors and yup errors
+      return res.json({ error: error.errors[0] });
     }
   };
 };
