@@ -1,11 +1,10 @@
 import { Request, Response } from 'express';
 import Exercise from '../models/exercise.model';
 import logger from '../utils/logger';
-import { exerciseInputInterface } from '../middleware/validateYupRequest';
 const createExercise = async (req: Request, res: Response) => {
   // I added the user object to the request headers
   // I tried to using mongo middleware to return the Date object as a string instead of wrapping it, will explain to you personally :)
-  const excerciseObj: exerciseInputInterface = req.body; // here i can assume the req.body passed the validation and therefore i can predict the type (will be used later)
+  const excerciseObj = req.body; // here i can assume the req.body passed the validation and therefore i can predict the type (will be used later)
   logger.info(`got new request for creating exercise, request body: ${JSON.stringify(req.body)}`);
 
   const user = req.CurrentUserObject;

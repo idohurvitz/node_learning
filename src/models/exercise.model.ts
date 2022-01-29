@@ -1,11 +1,5 @@
 import mongoose, { Document, Schema } from 'mongoose';
-
-interface ExerciseInterface extends Document {
-  userId: string;
-  duration: number;
-  description: string;
-  date: Date;
-}
+import exerciseInterface from '../interfaces/exercise.interface';
 
 const ExerciseSchema: Schema = new Schema(
   {
@@ -20,4 +14,4 @@ const ExerciseSchema: Schema = new Schema(
   }
 );
 
-export default mongoose.model<ExerciseInterface>('Exercise', ExerciseSchema);
+export default mongoose.model<exerciseInterface>('Exercise', ExerciseSchema);
